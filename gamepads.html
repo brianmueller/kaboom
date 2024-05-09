@@ -41,6 +41,7 @@
             setGravity(2400)
             setBackground(0, 0, 0)
             loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
+            loadSprite("apple", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/apple.png")
 
             scene("nogamepad", () => {
                 add([
@@ -77,7 +78,7 @@
                 */
 
                 // Initialize Kaboom.js
-                kaboom();
+                // kaboom();
 
                 // Load assets and create game elements
                 const player0 = add([
@@ -94,26 +95,27 @@
                 // Update function to handle game logic
                 function update() {
                 // Loop through each connected gamepad
-                for (let i = 0; i < getGamepadCount(); i++) {
-                    if (isGamepadConnected(i)) {
-                    const gamepad = getGamepad(i);
+                    for (let i = 0; i < getGamepadCount(); i++) {
+                        if (isGamepadConnected(i)) {
+                            const gamepad = getGamepad(i);
 
-                    // Check button presses for each button
-                    for (let button = 0; button < gamepad.buttons.length; button++) {
-                        if (gamepad.buttonPressed(button)) {
-                        // Perform actions based on button press
-                        switch (button) {
-                            case 0: // Button A
-                                // Perform action for button A
-                                players[i].jump();
-                                break;
-                            case 1: // Button B
-                                // Perform action for button B
-                                break;
-                            // Add cases for other buttons as needed
+                            // Check button presses for each button
+                            for (let button = 0; button < gamepad.buttons.length; button++) {
+                                if (gamepad.buttonPressed(button)) {
+                                // Perform actions based on button press
+                                    switch (button) {
+                                        case 0: // Button A
+                                            // Perform action for button A
+                                            players[i].jump();
+                                            break;
+                                        case 1: // Button B
+                                            // Perform action for button B
+                                            break;
+                                        // Add cases for other buttons as needed
+                                    }
+                                }
+                            }
                         }
-                        }
-                    }
                     }
                 }
 
@@ -127,7 +129,7 @@
                 */
 
                 // Start the game loop
-                start();
+                //start();
 
                 // platform
                 add([
