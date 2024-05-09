@@ -292,6 +292,8 @@
                     body(),
                 ]);
 
+                const players = [player0, player1];
+
                 // platform
                 add([
                     pos(0, height()),
@@ -348,7 +350,7 @@
                 player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
                 if(gamepad.buttonPressed(0)){ // A
                     // debug.log("button A was pressed");
-                    jump(player);
+                    jump(players[i]);
                 }
                 // if (gamepad.buttonPressed("up")) {
                 //     player.move(0, -5);
