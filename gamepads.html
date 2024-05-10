@@ -305,7 +305,6 @@
                 onKeyPress("w", () => jump(player0));
                 onKeyDown("a", () => {
                     player0.move(-MOVE_SPEED,0);
-                    debug.log("player 0 moving left");
                 });
                 onKeyDown("d", () => {
                     player0.move(MOVE_SPEED,0);
@@ -342,11 +341,13 @@
             }
 
             function handleGamepadInput(num){
+                debug.log("handlingGamepadInput");
                 const gamepad = getGamepad(num);
                 const player = players[num];
                 player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
                 if(gamepad.buttonPressed(0)){ // A
-                    jump(player)
+                    debug.log("button A was pressed");
+                    jump(player);
                 }
                 // if (gamepad.buttonPressed("up")) {
                 //     player.move(0, -5);
@@ -366,6 +367,16 @@
 
             go("game");
 
+
+
+            (function(){
+                var oldLog = console.log;
+                console.log = function (message) {
+                    // DO MESSAGE HERE.
+                    debug.log(message);
+                    oldLog.apply(console, arguments);
+                };
+            })();
         </script>
     </body>
 </html>
