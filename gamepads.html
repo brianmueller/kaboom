@@ -27,359 +27,64 @@
 
         <script type="module">
 
-
-
-
-/*
-            
-
-            // import kaboom.js
-            import kaboom from "https://unpkg.com/kaboom@3000.0.1/dist/kaboom.mjs";
-
             kaboom()
             setGravity(2400)
             setBackground(0, 0, 0)
             loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
-            loadSprite("apple", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/apple.png")
 
-            const JUMP_FORCE = 1000;
 
-            scene("nogamepad", () => {
-                add([
-                    text("Gamepad not found.\nConnect a gamepad and press a button!", {
-                        width: width() - 80,
-                        align: "center",
-                    }),
+            const playerColors = [
+                rgb(252, 53, 43),
+                rgb(0, 255, 0),
+                rgb(43, 71, 252),
+                rgb(255, 255, 0),
+                rgb(255, 0, 255),
+            ]
+
+            let playerCount = 0
+
+            function addPlayer(gamepad) {
+                const player = add([
                     pos(center()),
                     anchor("center"),
-                ])
-                onGamepadConnect(() => {
-                    go("game")
-                })
-            })
-
-            scene("game", () => {
-
-                // const player1 = add([
-                //     pos(center()),
-                //     anchor("center"),
-                //     sprite("bean"),
-                //     area(),
-                //     body(),
-                // ])
-
-                // const player2 = add([
-                //     pos(center()),
-                //     anchor("center"),
-                //     sprite("apple"),
-                //     area(),
-                //     body(),
-                // ])
-                
-
-                // Initialize Kaboom.js
-                // kaboom();
-
-                // Load assets and create game elements
-                const player0 = add([
                     sprite("bean"),
-                    pos(80, 80),
+                    color(playerColors[playerCount]),
                     area(),
                     body(),
-                ]);
-                const player1 = add([
-                    sprite("apple"),
-                    pos(120, 80),
-                    area(),
-                    body(),
-                ]);
-
-                const players = [player0, player1];
-
-                
-
-                // Example: Player movement controls
-                
-                // if (isGamepadConnected(0)) {
-                //     const gamepad = getGamepad(0);
-                //     player.move(gamepad.stick(0).add(gamepad.stick(1)).scale(80));
-                // }
-                // }
-                
-
-                // Start the game loop
-                //start();
-
-                // platform
-                add([
-                    pos(0, height()),
-                    anchor("botleft"),
-                    rect(width(), 140),
-                    area(),
-                    body({isStatic: true}),
+                    doubleJump(),
                 ])
 
-                // onGamepadButtonPress((b) => {
-                //     debug.log(b)
-                // })
+                playerCount++
 
-                // onGamepadButtonPress("south", () => {
-                //     player1.jump()
-                // })
+                onUpdate(() => {
+                    const leftStick = gamepad.getStick("left")
 
-                // onGamepadStick("left", (v) => {
-                //     player1.move(v.x * 400, 0)
-                // })
+                    if (gamepad.isPressed("south")) {
+                        player.doubleJump()
+                    }
 
-                // onGamepadDisconnect(() => {
-                //     go("nogamepad")
-                // })
-
-
-
-                function update() {
-                    // // Loop through each connected gamepad
-                    // for (let i = 0; i < getGamepadCount(); i++) {
-                    //     if (isGamepadConnected(i)) {
-                    //         const gamepad = getGamepad(i);
-
-                    //         // Check button presses for each button
-                    //         for (let button = 0; button < gamepad.buttons.length; button++) {
-                    //             if (gamepad.buttonPressed(button)) {
-                    //             // Perform actions based on button press
-                    //                 switch (button) {
-                    //                     case 0: // Button A
-                    //                         // Perform action for button A
-                    //                         players[i].jump();
-                    //                         break;
-                    //                     case 1: // Button B
-                    //                         // Perform action for button B
-                    //                         break;
-                    //                     // Add cases for other buttons as needed
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    // }
-
-                    handleAllGamepads();
-                    handleKeyboardInput();
-
-                }
-
-                // onKeyPress("space", jumpPlayer(player0));
-                // console.log("checking")
-                onKeyPress("space", () => {
-                    if(player0.isGrounded()) {
-                        player0.jump(JUMP_FORCE)
+                    if(leftStick.x !== 0) {
+                        player.move(leftStick.x * 400, 0)
                     }
                 })
-            }) // end of scene
-
-
-
-
-
-            // GAME CONTROLS
-            function handleGamepadInput(num){
-                const gamepad = getGamepad(num);
-                const player = players[num];
-                player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
-                if(gamepad.buttonPressed(0)){ // A
-                    player.jump();
-                }
-                // if (gamepad.buttonPressed("up")) {
-                //     player.move(0, -5);
-                // }
-                // if (gamepad.buttonPressed("down")) {
-                //     player.move(0, 5);
-                // }
-                // if (gamepad.buttonPressed("left")) {
-                //     player.move(-5, 0);
-                // }
-                // if (gamepad.buttonPressed("right")) {
-                //     player.move(5, 0);
-                // }
             }
 
-            
+            // platform
+            add([
+                pos(0, height()),
+                anchor("botleft"),
+                rect(width(), 140),
+                area(),
+                body({isStatic: true}),
+            ])
 
-            function jumpPlayer(player) {
-                if (player.isGrounded()) {
-                    player.jump(JUMP_FORCE)
-                }
-            }
-
-            function handleAllGamepads() {
-                for(var i = 0; i < 4; i++){
-                    if (isGamepadConnected(i)) {
-                        handleGamepadInput(i);
-                    }
-                }
-            }
-
-            
-
-            // Keyboard input handling
-            function handleKeyboardInput() {
-                if (keyIsDown("W")) {
-                    // player.move(0, -5);
-                    // jumpPlayer(player0);
-                    if(player0.isGrounded()) {
-                        player0.jump(JUMP_FORCE)
-                    }
-                }
-                // if (keyIsDown("S")) {
-                //     player.move(0, 5);
-                // }
-                if (keyIsDown("A")) {
-                    player0.move(-5, 0);
-                }
-                if (keyIsDown("D")) {
-                    player0.move(5, 0);
-                }
-
-            }
-            
-
-
-
-
-
-
-
-
-            // if(getGamepads().length > 0) {
-                go("game")
-            // } else {
-            //     go("nogamepad")
-            // }
-
-*/
-
-
-
-            // import kaboom.js
-            import kaboom from "https://unpkg.com/kaboom@3000.0.1/dist/kaboom.mjs";
-
-            // initialize kaboom context
-            kaboom();
-
-            const JUMP_FORCE = 1000;
-            const MOVE_SPEED = 500;
-
-            setGravity(2400)
-            setBackground(0, 0, 0)
-            loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
-            loadSprite("apple", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/apple.png")
-
-            
-
-
-            scene("game", () => {
-
-                const player0 = add([
-                    sprite("bean"),
-                    pos(80, 80),
-                    area(),
-                    body(),
-                ]);
-
-                const player1 = add([
-                    sprite("apple"),
-                    pos(160, 80),
-                    area(),
-                    body(),
-                ]);
-
-                const players = [player0, player1];
-
-                // platform
-                add([
-                    pos(0, height()),
-                    anchor("botleft"),
-                    rect(width(), 140),
-                    area(),
-                    body({isStatic: true}),
-                ]);
-
-                // PLAYER 0
-                onKeyPress("w", () => jump(player0));
-                onKeyDown("a", () => {
-                    player0.move(-MOVE_SPEED,0);
-                    debug.log("key A was pressed");
-                });
-                onKeyDown("d", () => {
-                    player0.move(MOVE_SPEED,0);
-                });
-
-                // PLAYER 1
-                onKeyPress("up", () => jump(player1));
-                onKeyDown("left", () => {
-                    player1.move(-MOVE_SPEED,0);
-                });
-                onKeyDown("right", () => {
-                    player1.move(MOVE_SPEED,0);
-                });
-
-                // GAMEPADS
-                for(var i = 0; i < 4; i++){
-                    if (isGamepadConnected(i)) {
-                        handleGamepadInput(i);
-                    }
-                }
-
+            // add players on every gamepad connect
+            onGamepadConnect((gamepad) => {
+                addPlayer(gamepad)
             })
 
-            function jump(player) {
-                // these 2 functions are provided by body() component
-                if (player.isGrounded()) {
-                    player.jump(JUMP_FORCE)
-                }
-            }
-
-            function isGamepadConnected(index){
-                const gamepads = navigator.getGamepads();
-                return gamepads[index] != null;
-            }
-
-            function handleGamepadInput(num){
-                // debug.log("handlingGamepadInput");
-                const gamepad = getGamepad(num);
-                const player = players[num];
-                player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
-                if(gamepad.buttonPressed(0)){ // A
-                    // debug.log("button A was pressed");
-                    jump(players[i]);
-                }
-                // if (gamepad.buttonPressed("up")) {
-                //     player.move(0, -5);
-                // }
-                // if (gamepad.buttonPressed("down")) {
-                //     player.move(0, 5);
-                // }
-                // if (gamepad.buttonPressed("left")) {
-                //     player.move(-5, 0);
-                // }
-                // if (gamepad.buttonPressed("right")) {
-                //     player.move(5, 0);
-                // }
-            }
-
-            
-
-            go("game");
 
 
-
-            (function(){
-                var oldLog = console.log;
-                console.log = function (message) {
-                    // DO MESSAGE HERE.
-                    debug.log(message);
-                    oldLog.apply(console, arguments);
-                };
-            })();
         </script>
     </body>
 </html>
