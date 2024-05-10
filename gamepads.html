@@ -45,8 +45,10 @@
             ]
 
             let playerCount = 0
+            let players = [];
 
-            function addPlayer(gamepad) {
+            function addPlayer(){
+                playerCount++
                 const player = add([
                     pos(center()),
                     anchor("center"),
@@ -56,9 +58,12 @@
                     body(),
                     doubleJump(),
                 ])
+                players.push(player)
+                return player;
+            }
 
-                playerCount++
-
+            function addPlayerController(gamepad) {
+                const player = addPlayer();
                 onUpdate(() => {
                     const leftStick = gamepad.getStick("left")
 
@@ -83,10 +88,16 @@
 
             // add players on every gamepad connect
             onGamepadConnect((gamepad) => {
-                addPlayer(gamepad)
+                addPlayerController(gamepad)
             })
 
-
+            // (function(){
+            //     var oldError = console.error;
+            //     console.error = function (message, filename, lineNumber) {
+            //         debug.log("Error: " + message + " at " + filename + ":" + lineNumber);
+            //         oldError.apply(console, arguments);
+            //     };
+            // })();
 
         </script>
     </body>
