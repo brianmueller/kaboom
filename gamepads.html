@@ -36,6 +36,10 @@
             loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
 
 
+            const MOVE_SPEED = 500;
+            let playerCount = 0
+            let players = [];
+
             const playerColors = [
                 rgb(255, 53, 43),
                 rgb(0, 255, 0),
@@ -43,9 +47,6 @@
                 rgb(255, 255, 0),
                 rgb(255, 0, 255),
             ]
-
-            let playerCount = 0
-            let players = [];
 
             function addPlayer(){
                 playerCount++
@@ -77,6 +78,12 @@
                 })
             }
 
+            function addPlayerKeyboard(key) {
+                const player = addPlayer();
+
+
+            }
+
             // platform
             add([
                 pos(0, height()),
@@ -91,13 +98,42 @@
                 addPlayerController(gamepad)
             })
 
-            // (function(){
-            //     var oldError = console.error;
-            //     console.error = function (message, filename, lineNumber) {
-            //         debug.log("Error: " + message + " at " + filename + ":" + lineNumber);
-            //         oldError.apply(console, arguments);
-            //     };
-            // })();
+            let wPlayer = false;
+            onKeyPress("w", () => {
+                if(!wPlayer){
+                    wPlayer = true;
+                    const player = addPlayer();
+
+                    onKeyPress("w", () => {
+                        player.doubleJump();
+                    })
+                    onKeyDown("a", () => {
+                        player.move(-MOVE_SPEED, 0);
+                    })
+                    onKeyDown("d", () => {
+                        player.move(MOVE_SPEED, 0);
+                    })
+                }
+            })
+
+            let upPlayer = false;
+            onKeyPress("up", () => {
+                if(!upPlayer){
+                    upPlayer = true;
+                    const player = addPlayer();
+
+                    onKeyPress("up", () => {
+                        player.doubleJump();
+                    })
+                    onKeyDown("left", () => {
+                        player.move(-MOVE_SPEED, 0);
+                    })
+                    onKeyDown("right", () => {
+                        player.move(MOVE_SPEED, 0);
+                    })
+                }
+            })
+
 
         </script>
     </body>
