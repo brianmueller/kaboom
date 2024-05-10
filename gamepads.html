@@ -27,21 +27,22 @@
 
         <script type="module">
 
+
+
+
+/*
+            
+
             // import kaboom.js
             import kaboom from "https://unpkg.com/kaboom@3000.0.1/dist/kaboom.mjs";
-
-            
-            
-
-
-
-
 
             kaboom()
             setGravity(2400)
             setBackground(0, 0, 0)
             loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
             loadSprite("apple", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/apple.png")
+
+            const JUMP_FORCE = 1000;
 
             scene("nogamepad", () => {
                 add([
@@ -59,23 +60,22 @@
 
             scene("game", () => {
 
-                /*
-                const player1 = add([
-                    pos(center()),
-                    anchor("center"),
-                    sprite("bean"),
-                    area(),
-                    body(),
-                ])
+                // const player1 = add([
+                //     pos(center()),
+                //     anchor("center"),
+                //     sprite("bean"),
+                //     area(),
+                //     body(),
+                // ])
 
-                const player2 = add([
-                    pos(center()),
-                    anchor("center"),
-                    sprite("apple"),
-                    area(),
-                    body(),
-                ])
-                */
+                // const player2 = add([
+                //     pos(center()),
+                //     anchor("center"),
+                //     sprite("apple"),
+                //     area(),
+                //     body(),
+                // ])
+                
 
                 // Initialize Kaboom.js
                 // kaboom();
@@ -84,49 +84,28 @@
                 const player0 = add([
                     sprite("bean"),
                     pos(80, 80),
+                    area(),
+                    body(),
                 ]);
                 const player1 = add([
                     sprite("apple"),
                     pos(120, 80),
+                    area(),
+                    body(),
                 ]);
 
                 const players = [player0, player1];
 
-                // Update function to handle game logic
-                function update() {
-                // Loop through each connected gamepad
-                    for (let i = 0; i < getGamepadCount(); i++) {
-                        if (isGamepadConnected(i)) {
-                            const gamepad = getGamepad(i);
-
-                            // Check button presses for each button
-                            for (let button = 0; button < gamepad.buttons.length; button++) {
-                                if (gamepad.buttonPressed(button)) {
-                                // Perform actions based on button press
-                                    switch (button) {
-                                        case 0: // Button A
-                                            // Perform action for button A
-                                            players[i].jump();
-                                            break;
-                                        case 1: // Button B
-                                            // Perform action for button B
-                                            break;
-                                        // Add cases for other buttons as needed
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                
 
                 // Example: Player movement controls
-                /*
-                if (isGamepadConnected(0)) {
-                    const gamepad = getGamepad(0);
-                    player.move(gamepad.stick(0).add(gamepad.stick(1)).scale(80));
-                }
-                }
-                */
+                
+                // if (isGamepadConnected(0)) {
+                //     const gamepad = getGamepad(0);
+                //     player.move(gamepad.stick(0).add(gamepad.stick(1)).scale(80));
+                // }
+                // }
+                
 
                 // Start the game loop
                 //start();
@@ -139,33 +118,253 @@
                     area(),
                     body({isStatic: true}),
                 ])
-/*
-                onGamepadButtonPress((b) => {
-                    debug.log(b)
-                })
 
-                onGamepadButtonPress("south", () => {
-                    player1.jump()
-                })
+                // onGamepadButtonPress((b) => {
+                //     debug.log(b)
+                // })
 
-                onGamepadStick("left", (v) => {
-                    player1.move(v.x * 400, 0)
-                })
+                // onGamepadButtonPress("south", () => {
+                //     player1.jump()
+                // })
 
-                onGamepadDisconnect(() => {
-                    go("nogamepad")
-                })
-*/
-            })
+                // onGamepadStick("left", (v) => {
+                //     player1.move(v.x * 400, 0)
+                // })
 
-            if(getGamepads().length > 0) {
-                go("game")
-            } else {
-                go("nogamepad")
+                // onGamepadDisconnect(() => {
+                //     go("nogamepad")
+                // })
+
+
+
+                function update() {
+                    // // Loop through each connected gamepad
+                    // for (let i = 0; i < getGamepadCount(); i++) {
+                    //     if (isGamepadConnected(i)) {
+                    //         const gamepad = getGamepad(i);
+
+                    //         // Check button presses for each button
+                    //         for (let button = 0; button < gamepad.buttons.length; button++) {
+                    //             if (gamepad.buttonPressed(button)) {
+                    //             // Perform actions based on button press
+                    //                 switch (button) {
+                    //                     case 0: // Button A
+                    //                         // Perform action for button A
+                    //                         players[i].jump();
+                    //                         break;
+                    //                     case 1: // Button B
+                    //                         // Perform action for button B
+                    //                         break;
+                    //                     // Add cases for other buttons as needed
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
+
+                    handleAllGamepads();
+                    handleKeyboardInput();
+
+                }
+
+                // onKeyPress("space", jumpPlayer(player0));
+                // console.log("checking")
+                onKeyPress("space", () => {
+                    if(player0.isGrounded()) {
+                        player0.jump(JUMP_FORCE)
+                    }
+                })
+            }) // end of scene
+
+
+
+
+
+            // GAME CONTROLS
+            function handleGamepadInput(num){
+                const gamepad = getGamepad(num);
+                const player = players[num];
+                player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
+                if(gamepad.buttonPressed(0)){ // A
+                    player.jump();
+                }
+                // if (gamepad.buttonPressed("up")) {
+                //     player.move(0, -5);
+                // }
+                // if (gamepad.buttonPressed("down")) {
+                //     player.move(0, 5);
+                // }
+                // if (gamepad.buttonPressed("left")) {
+                //     player.move(-5, 0);
+                // }
+                // if (gamepad.buttonPressed("right")) {
+                //     player.move(5, 0);
+                // }
             }
 
+            
+
+            function jumpPlayer(player) {
+                if (player.isGrounded()) {
+                    player.jump(JUMP_FORCE)
+                }
+            }
+
+            function handleAllGamepads() {
+                for(var i = 0; i < 4; i++){
+                    if (isGamepadConnected(i)) {
+                        handleGamepadInput(i);
+                    }
+                }
+            }
+
+            
+
+            // Keyboard input handling
+            function handleKeyboardInput() {
+                if (keyIsDown("W")) {
+                    // player.move(0, -5);
+                    // jumpPlayer(player0);
+                    if(player0.isGrounded()) {
+                        player0.jump(JUMP_FORCE)
+                    }
+                }
+                // if (keyIsDown("S")) {
+                //     player.move(0, 5);
+                // }
+                if (keyIsDown("A")) {
+                    player0.move(-5, 0);
+                }
+                if (keyIsDown("D")) {
+                    player0.move(5, 0);
+                }
+
+            }
+            
 
 
+
+
+
+
+
+
+            // if(getGamepads().length > 0) {
+                go("game")
+            // } else {
+            //     go("nogamepad")
+            // }
+
+*/
+
+
+
+            // import kaboom.js
+            import kaboom from "https://unpkg.com/kaboom@3000.0.1/dist/kaboom.mjs";
+
+            // initialize kaboom context
+            kaboom();
+
+            const JUMP_FORCE = 1000;
+            const MOVE_SPEED = 500;
+
+            setGravity(2400)
+            setBackground(0, 0, 0)
+            loadSprite("bean", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/bean.png")
+            loadSprite("apple", "https://raw.githubusercontent.com/replit/kaboom/master/sprites/apple.png")
+
+            
+
+
+            scene("game", () => {
+
+                const player0 = add([
+                    sprite("bean"),
+                    pos(80, 80),
+                    area(),
+                    body(),
+                ]);
+
+                const player1 = add([
+                    sprite("apple"),
+                    pos(160, 80),
+                    area(),
+                    body(),
+                ]);
+
+                // platform
+                add([
+                    pos(0, height()),
+                    anchor("botleft"),
+                    rect(width(), 140),
+                    area(),
+                    body({isStatic: true}),
+                ]);
+
+                // PLAYER 0
+                onKeyPress("w", () => jump(player0));
+                onKeyDown("a", () => {
+                    player0.move(-MOVE_SPEED,0);
+                    debug.log("player 0 moving left");
+                });
+                onKeyDown("d", () => {
+                    player0.move(MOVE_SPEED,0);
+                });
+
+                // PLAYER 1
+                onKeyPress("up", () => jump(player1));
+                onKeyDown("left", () => {
+                    player1.move(-MOVE_SPEED,0);
+                });
+                onKeyDown("right", () => {
+                    player1.move(MOVE_SPEED,0);
+                });
+
+                // GAMEPADS
+                for(var i = 0; i < 4; i++){
+                    if (isGamepadConnected(i)) {
+                        handleGamepadInput(i);
+                    }
+                }
+
+            })
+
+            function jump(player) {
+                // these 2 functions are provided by body() component
+                if (player.isGrounded()) {
+                    player.jump(JUMP_FORCE)
+                }
+            }
+
+            function isGamepadConnected(index){
+                const gamepads = navigator.getGamepads();
+                return gamepads[index] != null;
+            }
+
+            function handleGamepadInput(num){
+                const gamepad = getGamepad(num);
+                const player = players[num];
+                player.move(gamepad.stick(num).add(gamepad.stick(1)).scale(80));
+                if(gamepad.buttonPressed(0)){ // A
+                    jump(player)
+                }
+                // if (gamepad.buttonPressed("up")) {
+                //     player.move(0, -5);
+                // }
+                // if (gamepad.buttonPressed("down")) {
+                //     player.move(0, 5);
+                // }
+                // if (gamepad.buttonPressed("left")) {
+                //     player.move(-5, 0);
+                // }
+                // if (gamepad.buttonPressed("right")) {
+                //     player.move(5, 0);
+                // }
+            }
+
+            
+
+            go("game");
 
         </script>
     </body>
