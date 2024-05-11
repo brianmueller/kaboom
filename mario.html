@@ -72,7 +72,8 @@
                 //     "         = @",
                 //     "============",
                 // ],
-                [
+
+                [ /* 1 */
                     "                  ",
                     "                  ",
                     "                  ",
@@ -82,30 +83,16 @@
                     "      === ===    @",
                     "=====         ===="
                 ],
-                [
-                    "                          $",
-                    "                          $",
-                    "                          $",
-                    "                          $",
-                    "                          $",
-                    "           $$         =   $",
-                    "         ====         =   $",
-                    "                      =   $",
-                    "                      =    ",
-                    "              =     =   @",
-                    "===========================",
+                [ /* 2 */
+
                 ],
-                [
-                    "     $    $    $    $     $",
-                    "     $    $    $    $     $",
-                    "                           ",
-                    "                           ",
-                    "                           ",
-                    "                           ",
-                    "                           ",
-                    " ^^^^>^^^^>^^^^>^^^^>^^^^^@",
-                    "===========================",
+                [ /* 3 */
+                    
                 ],
+                [ /* 4 */
+                    
+                ],
+                
             ]
             
             const levelConf = {
@@ -240,6 +227,13 @@
                 window.playerBehavior = function(player){
                     player.onCollide("portal", () => {
                         // play("portal")
+
+                        // if(players.length > 1){
+                        //     // destroy(player)
+                        //     players.splice(players.indexOf(player),1)
+                        //     return
+                        // }
+
                         if (levelId + 1 < LEVELS.length) {
                             go("game", {
                                 levelId: levelId + 1,
@@ -259,6 +253,7 @@
                         coins += 1
                         coinsLabel.text = coins
                     })
+
                 }
 
                 const coinsLabel = add([
@@ -266,6 +261,27 @@
                     pos(24, 24),
                     fixed(),
                 ])
+
+                // skip to level
+                document.addEventListener("keypress", function(event) {
+                    const keyPressed = event.key;
+                    const isNumberKey = /[0-9]/.test(keyPressed);
+                    
+                    if (isNumberKey) {
+                        const levelIndex = parseInt(keyPressed) - 1;
+
+                        if (levelIndex >= 0 && levelIndex < LEVELS.length) {
+                            go("game", {
+                                levelId: levelIndex,
+                                coins: coins,
+                            });
+                        } else {
+                            // level is out of range
+                            console.log("Invalid level index:", levelIndex);
+                        }
+                    }
+                });
+                
 
             })
 
