@@ -66,7 +66,7 @@
                     "       $$   ",
                     "     ===   ",
                     "            ",
-                    "   ^^  > = @",
+                    "   ^^    = @",
                     "============",
                 ],
                 [
@@ -107,52 +107,52 @@
                         offscreen({ hide: true }),
                         "platform",
                     ],
-                    // "-": () => [
-                    //     sprite("steel"),
-                    //     area(),
-                    //     body({ isStatic: true }),
-                    //     offscreen({ hide: true }),
-                    //     anchor("bot"),
-                    // ],
-                    // "0": () => [
-                    //     sprite("bag"),
-                    //     area(),
-                    //     body({ isStatic: true }),
-                    //     offscreen({ hide: true }),
-                    //     anchor("bot"),
-                    // ],
-                    // "$": () => [
-                    //     sprite("coin"),
-                    //     area(),
-                    //     pos(0, -9),
-                    //     anchor("bot"),
-                    //     offscreen({ hide: true }),
-                    //     "coin",
-                    // ],
-                    // "%": () => [
-                    //     sprite("prize"),
-                    //     area(),
-                    //     body({ isStatic: true }),
-                    //     anchor("bot"),
-                    //     offscreen({ hide: true }),
-                    //     "prize",
-                    // ],
-                    // "^": () => [
-                    //     sprite("spike"),
-                    //     area(),
-                    //     body({ isStatic: true }),
-                    //     anchor("bot"),
-                    //     offscreen({ hide: true }),
-                    //     "danger",
-                    // ],
-                    // "#": () => [
-                    //     sprite("apple"),
-                    //     area(),
-                    //     anchor("bot"),
-                    //     body(),
-                    //     offscreen({ hide: true }),
-                    //     "apple",
-                    // ],
+                    "-": () => [
+                        sprite("steel"),
+                        area(),
+                        body({ isStatic: true }),
+                        offscreen({ hide: true }),
+                        anchor("bot"),
+                    ],
+                    "0": () => [
+                        sprite("bag"),
+                        area(),
+                        body({ isStatic: true }),
+                        offscreen({ hide: true }),
+                        anchor("bot"),
+                    ],
+                    "$": () => [
+                        sprite("coin"),
+                        area(),
+                        pos(0, -9),
+                        anchor("bot"),
+                        offscreen({ hide: true }),
+                        "coin",
+                    ],
+                    "%": () => [
+                        sprite("prize"),
+                        area(),
+                        body({ isStatic: true }),
+                        anchor("bot"),
+                        offscreen({ hide: true }),
+                        "prize",
+                    ],
+                    "^": () => [
+                        sprite("spike"),
+                        area(),
+                        body({ isStatic: true }),
+                        anchor("bot"),
+                        offscreen({ hide: true }),
+                        "danger",
+                    ],
+                    "#": () => [
+                        sprite("apple"),
+                        area(),
+                        anchor("bot"),
+                        body(),
+                        offscreen({ hide: true }),
+                        "apple",
+                    ],
                     // ">": () => [
                     //     sprite("ghosty"),
                     //     area(),
@@ -162,14 +162,14 @@
                     //     offscreen({ hide: true }),
                     //     "enemy",
                     // ],
-                    // "@": () => [
-                    //     sprite("portal"),
-                    //     area({ scale: 0.5 }),
-                    //     anchor("bot"),
-                    //     pos(0, -12),
-                    //     offscreen({ hide: true }),
-                    //     "portal",
-                    // ],
+                    "@": () => [
+                        sprite("portal"),
+                        area({ scale: 0.5 }),
+                        anchor("bot"),
+                        pos(0, -12),
+                        offscreen({ hide: true }),
+                        "portal",
+                    ],
                 },
             }
 
@@ -219,6 +219,36 @@
                     }
                 })
 
+                window.playerBehavior = function(player){
+                    player.onCollide("portal", () => {
+                        // play("portal")
+                        if (levelId + 1 < LEVELS.length) {
+                            go("game", {
+                                levelId: levelId + 1,
+                                coins: coins,
+                            })
+                        } else {
+                            go("win")
+                        }
+                    })
+                    
+                    player.onCollide("coin", (c) => {
+                        destroy(c)
+                        // play("coin", {
+                        //     detune: coinPitch,
+                        // })
+                        // coinPitch += 100
+                        coins += 1
+                        coinsLabel.text = coins
+                    })
+                }
+
+                const coinsLabel = add([
+                    text(coins),
+                    pos(24, 24),
+                    fixed(),
+                ])
+
             })
 
 
@@ -258,6 +288,7 @@
                     doubleJump(),
                 ])
                 players.push(player)
+                playerBehavior(player);
 
                 player.onUpdate(() => {
                     // center camera to player
