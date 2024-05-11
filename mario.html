@@ -66,7 +66,7 @@
                     "       $$   ",
                     "     ===   ",
                     "            ",
-                    "   ^^    = @",
+                    "         = @",
                     "============",
                 ],
                 [
@@ -190,7 +190,7 @@
                         const player = addPlayer();
 
                         onKeyPress("w", () => {
-                            player.doubleJump();
+                            jump(player)
                         })
                         onKeyDown("a", () => {
                             player.move(-MOVE_SPEED, 0);
@@ -208,7 +208,7 @@
                         const player = addPlayer();
 
                         onKeyPress("up", () => {
-                            player.doubleJump();
+                            jump(player)
                         })
                         onKeyDown("left", () => {
                             player.move(-MOVE_SPEED, 0);
@@ -219,6 +219,11 @@
                     }
                 })
 
+                window.jump = function(player){
+                    if (player.isGrounded()) {
+                        player.jump(JUMP_FORCE)
+                    }
+                }
                 window.playerBehavior = function(player){
                     player.onCollide("portal", () => {
                         // play("portal")
@@ -285,7 +290,7 @@
                     color(playerColors[playerCount]),
                     area(),
                     body(),
-                    doubleJump(),
+                    // doubleJump(),
                 ])
                 players.push(player)
                 playerBehavior(player);
@@ -311,7 +316,8 @@
                     const leftStick = gamepad.getStick("left")
 
                     if (gamepad.isPressed("south")) {
-                        player.doubleJump()
+                        jump(player)
+                        // player.jump()
                     }
 
                     if(leftStick.x !== 0) {
