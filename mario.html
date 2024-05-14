@@ -193,7 +193,7 @@
                     addPlayerController(gamepad)
                 })
 
-                let wPlayer = false;
+                
                 onKeyPress("w", () => {
                     if(!wPlayer){
                         wPlayer = true;
@@ -211,7 +211,6 @@
                     }
                 })
 
-                let upPlayer = false;
                 onKeyPress("up", () => {
                     if(!upPlayer){
                         upPlayer = true;
@@ -245,6 +244,7 @@
                         // }
 
                         if (levelId + 1 < LEVELS.length) {
+                            resetPlayerPositions()
                             go("game", {
                                 levelId: levelId + 1,
                                 coins: coins,
@@ -274,6 +274,9 @@
 
                 // skip to level
                 document.addEventListener("keypress", function(event) {
+                    if(players.length > 0){
+                        console.log(players[0].pos.x)
+                    }
                     const keyPressed = event.key;
                     const isNumberKey = /[0-9]/.test(keyPressed);
                     
@@ -310,6 +313,8 @@
 
             let playerCount = 0
             let players = [];
+            let wPlayer = false;
+            let upPlayer = false;
 
             const playerColors = [
                 rgb(255, 53, 43),
@@ -362,6 +367,13 @@
                     if(leftStick.x !== 0) {
                         player.move(leftStick.x * 400, 0)
                     }
+                })
+            }
+
+            function resetPlayerPositions(){
+                players.forEach(function(player,i){
+                    player.pos.x = 20*i+20
+                    player.pos.y = 0
                 })
             }
 
